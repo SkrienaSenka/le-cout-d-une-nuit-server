@@ -53,6 +53,24 @@ app.post('/create-game', (req, res) => {
     res.send({ port });
 })
 
+app.post('/message', (req, res) => {
+    const game = games[req.body.port];
+    if (!game) {
+        res.send(false);
+        return;
+    }
+    game.socket.clients.forEach(function (client) {
+        client.send(JSON.stringify({
+            type: 'message',
+            payload: {
+                sender: req.body.pseudo,
+                message: req.body.message
+            }
+        }));
+    });
+    res.send(true);
+})
+
 app.listen(PORT);
 
 console.log("Listening on port " + PORT);
