@@ -32,6 +32,10 @@ function onJoiningGame(port, websocket) {
     websocket.send(JSON.stringify({ type: 'state', payload: copiedGame }));
 }
 
+app.get('/server-port', (req, res) => {
+    res.send({ port: PORT });
+})
+
 app.post('/create-game', (req, res) => {
     const port = freePorts[0];
     freePorts.splice(0, 1);
